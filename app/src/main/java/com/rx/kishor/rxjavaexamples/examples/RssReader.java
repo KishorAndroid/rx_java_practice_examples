@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.einmalfel.earl.EarlParser;
@@ -40,15 +39,12 @@ import rx.schedulers.Schedulers;
 public class RssReader extends Fragment {
 
     private static final String TAG = RssReader.class.getCanonicalName();
-    private ArrayList<String> rssFeeds = new ArrayList<>();
-    private LogAdapter rssAdapter; //used for showing RSS feeds
-
     @Bind(R.id.rss_feed)
     ListView rssFeed;
-
     @Bind(R.id.progress_bar)
     ContentLoadingProgressBar progressBar;
-
+    private ArrayList<String> rssFeeds = new ArrayList<>();
+    private LogAdapter rssAdapter; //used for showing RSS feeds
     private View rootView;
 
     private Subscription subscription;
@@ -72,7 +68,7 @@ public class RssReader extends Fragment {
         super.onPause();
         try {
             subscription.unsubscribe();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

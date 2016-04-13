@@ -5,27 +5,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.einmalfel.earl.EarlParser;
-import com.einmalfel.earl.Feed;
-import com.einmalfel.earl.Item;
 import com.rx.kishor.rxjavaexamples.R;
 import com.rx.kishor.rxjavaexamples.adapter.LogAdapter;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -52,6 +42,8 @@ public class ConcurrencyWithScheduler extends Fragment {
     private Subscription _subscription;
 
     private View rootView;
+    private LogAdapter _adapter;
+    private List<String> _logs;
 
     @Nullable
     @Override
@@ -127,9 +119,6 @@ public class ConcurrencyWithScheduler extends Fragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
-
-    private LogAdapter _adapter;
-    private List<String> _logs;
 
     private void _doSomeLongOperation_thatBlocksCurrentThread() throws InterruptedException {
         _log("performing long operation");

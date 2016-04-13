@@ -40,6 +40,8 @@ public class BufferExample extends Fragment {
     private View rootView;
 
     private Subscription _subscription;
+    private LogAdapter _adapter;
+    private List<String> _logs;
 
     @Nullable
     @Override
@@ -94,9 +96,6 @@ public class BufferExample extends Fragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
-
-    private LogAdapter _adapter;
-    private List<String> _logs;
 
     private void _setupLogger() {
         _logs = new ArrayList<>();

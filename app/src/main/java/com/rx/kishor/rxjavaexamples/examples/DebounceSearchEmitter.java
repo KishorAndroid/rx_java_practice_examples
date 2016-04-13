@@ -39,10 +39,12 @@ public class DebounceSearchEmitter extends Fragment {
 
     @Bind(R.id.clr_debounce)
     ImageButton clearSearch;
-
+    @Bind(R.id.log_list)
+    ListView _logsList;
     private View rootView;
-
     private Subscription subscription;
+    private LogAdapter _adapter;
+    private List<String> _logs;
 
     @Nullable
     @Override
@@ -68,7 +70,7 @@ public class DebounceSearchEmitter extends Fragment {
                 .filter(new Func1<TextViewTextChangeEvent, Boolean>() {
                     @Override
                     public Boolean call(TextViewTextChangeEvent changes) {
-                        if(searchText.getText().toString() != null && !searchText.getText().toString().isEmpty()){
+                        if (searchText.getText().toString() != null && !searchText.getText().toString().isEmpty()) {
                             return true;
                         }
                         return false;
@@ -101,9 +103,9 @@ public class DebounceSearchEmitter extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        try{
+        try {
             subscription.unsubscribe();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -113,13 +115,6 @@ public class DebounceSearchEmitter extends Fragment {
         super.onDestroy();
         ButterKnife.unbind(this);
     }
-
-
-    @Bind(R.id.log_list)
-    ListView _logsList;
-
-    private LogAdapter _adapter;
-    private List<String> _logs;
 
     private void _setupLogger() {
         _logs = new ArrayList<>();

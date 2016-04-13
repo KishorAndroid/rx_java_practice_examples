@@ -2,6 +2,7 @@ package com.rx.kishor.rxjavaexamples;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import com.rx.kishor.rxjavaexamples.examples.BufferExample;
 import com.rx.kishor.rxjavaexamples.examples.ConcurrencyWithScheduler;
 import com.rx.kishor.rxjavaexamples.examples.DebounceSearchEmitter;
+import com.rx.kishor.rxjavaexamples.examples.DoubleBinding;
 import com.rx.kishor.rxjavaexamples.examples.FormValidation;
 import com.rx.kishor.rxjavaexamples.examples.RssReader;
 
@@ -35,6 +37,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.fragment_holder, new IntroFragment(), IntroFragment.class.getCanonicalName());
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
     }
 
     @Override
@@ -76,23 +83,54 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        String TAG = "";
         if (id == R.id.click_buffer_example) {
-            ft.replace(R.id.fragment_holder, new BufferExample());
+            TAG = BufferExample.class.getCanonicalName();
         } else if (id == R.id.concurrency_with_scheduler) {
-            ft.replace(R.id.fragment_holder, new ConcurrencyWithScheduler());
+            TAG = ConcurrencyWithScheduler.class.getCanonicalName();
         } else if (id == R.id.debounce_eearch_emitter) {
-            ft.replace(R.id.fragment_holder, new DebounceSearchEmitter());
+            TAG = DebounceSearchEmitter.class.getCanonicalName();
         } else if (id == R.id.form_validation) {
-            ft.replace(R.id.fragment_holder, new FormValidation());
+            TAG = FormValidation.class.getCanonicalName();
         } else if (id == R.id.rss_reader) {
-            ft.replace(R.id.fragment_holder, new RssReader());
+            TAG = RssReader.class.getCanonicalName();
+        } else if (id == R.id.double_binding) {
+            TAG = DoubleBinding.class.getCanonicalName();
         }
 
+        ft.replace(R.id.fragment_holder, checkFragmentExistence(TAG), TAG);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private Fragment checkFragmentExistence(String TAG) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG);
+        if (fragment == null) {
+            if (TAG.equalsIgnoreCase(BufferExample.class.getCanonicalName())) {
+                return new BufferExample();
+            }
+            if (TAG.equalsIgnoreCase(ConcurrencyWithScheduler.class.getCanonicalName())) {
+                return new ConcurrencyWithScheduler();
+            }
+            if (TAG.equalsIgnoreCase(RssReader.class.getCanonicalName())) {
+                return new RssReader();
+            }
+            if (TAG.equalsIgnoreCase(FormValidation.class.getCanonicalName())) {
+                return new FormValidation();
+            }
+            if (TAG.equalsIgnoreCase(DebounceSearchEmitter.class.getCanonicalName())) {
+                return new DebounceSearchEmitter();
+            }
+            if (TAG.equalsIgnoreCase(DoubleBinding.class.getCanonicalName())) {
+                return new DoubleBinding();
+            }
+        } else {
+            return fragment;
+        }
+        return null;
     }
 }

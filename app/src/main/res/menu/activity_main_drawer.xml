@@ -17,6 +17,9 @@
         <item
             android:id="@+id/rss_reader"
             android:title="Rss Reader" />
+        <item
+            android:id="@+id/double_binding"
+            android:title="Double Binding" />
     </group>
 
 </menu>
