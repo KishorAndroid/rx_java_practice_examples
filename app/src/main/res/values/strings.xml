@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">RxJava Examples</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="buffer_example_button">Click</string>
+    <string name="msg_demo_debounce">Start search after 500ms</string>
+    <string name="msg_demo_form_comb_latest">Form Validation Example</string>
+</resources>

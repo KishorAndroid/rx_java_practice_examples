@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/click_buffer_example"
+            android:title="Click Buffers Example" />
+        <item
+            android:id="@+id/concurrency_with_scheduler"
+            android:title="Concurrency with scheduler" />
+        <item
+            android:id="@+id/debounce_eearch_emitter"
+            android:title="Debounce Search Emitter" />
+        <item
+            android:id="@+id/form_validation"
+            android:title="Form Validation" />
+        <item
+            android:id="@+id/rss_reader"
+            android:title="Rss Reader" />
+    </group>
+
+</menu>
