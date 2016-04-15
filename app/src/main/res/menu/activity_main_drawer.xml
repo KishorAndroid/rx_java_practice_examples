@@ -20,6 +20,12 @@
         <item
             android:id="@+id/double_binding"
             android:title="Double Binding" />
+        <item
+            android:id="@+id/rx_single_demo"
+            android:title="Rx Single Demo" />
+        <item
+            android:id="@+id/rx_publish_subject_demo"
+            android:title="Rx Publish Subject Demo" />
     </group>
 
 </menu>

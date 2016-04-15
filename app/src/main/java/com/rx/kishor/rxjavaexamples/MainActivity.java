@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,6 +19,8 @@ import com.rx.kishor.rxjavaexamples.examples.DebounceSearchEmitter;
 import com.rx.kishor.rxjavaexamples.examples.DoubleBinding;
 import com.rx.kishor.rxjavaexamples.examples.FormValidation;
 import com.rx.kishor.rxjavaexamples.examples.RssReader;
+import com.rx.kishor.rxjavaexamples.examples.RxPublishSubjectDemo;
+import com.rx.kishor.rxjavaexamples.examples.RxSingleDemo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -96,6 +99,10 @@ public class MainActivity extends AppCompatActivity
             TAG = RssReader.class.getCanonicalName();
         } else if (id == R.id.double_binding) {
             TAG = DoubleBinding.class.getCanonicalName();
+        } else if (id == R.id.rx_single_demo) {
+            TAG = RxSingleDemo.class.getCanonicalName();
+        } else if (id == R.id.rx_publish_subject_demo) {
+            TAG = RxPublishSubjectDemo.class.getCanonicalName();
         }
 
         ft.replace(R.id.fragment_holder, checkFragmentExistence(TAG), TAG);
@@ -127,6 +134,12 @@ public class MainActivity extends AppCompatActivity
             }
             if (TAG.equalsIgnoreCase(DoubleBinding.class.getCanonicalName())) {
                 return new DoubleBinding();
+            }
+            if (TAG.equalsIgnoreCase(RxSingleDemo.class.getCanonicalName())) {
+                return new RxSingleDemo();
+            }
+            if (TAG.equalsIgnoreCase(RxPublishSubjectDemo.class.getCanonicalName())) {
+                return new RxPublishSubjectDemo();
             }
         } else {
             return fragment;

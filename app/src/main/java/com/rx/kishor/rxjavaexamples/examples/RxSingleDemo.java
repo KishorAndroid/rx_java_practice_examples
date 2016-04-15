@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.einmalfel.earl.EarlParser;
 import com.einmalfel.earl.Feed;
@@ -22,28 +23,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.zip.DataFormatException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Observer;
+import rx.Scheduler;
+import rx.Single;
+import rx.SingleSubscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by user on 4/13/2016.
+ * Created by user on 4/14/2016.
  */
-public class RssReader extends Fragment {
+public class RxSingleDemo extends Fragment {
 
-    private static final String TAG = RssReader.class.getCanonicalName();
+    private static final String TAG = RxSingleDemo.class.getCanonicalName();
     @Bind(R.id.rss_feed)
     ListView rssFeed;
     @Bind(R.id.progress_bar)
     ContentLoadingProgressBar progressBar;
-    private ArrayList<String> rssFeeds = new ArrayList<>();
     private LogAdapter rssAdapter; //used for showing RSS feeds
     private View rootView;
 
@@ -52,9 +54,15 @@ public class RssReader extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.rss_reader, container, false);
+        rootView = inflater.inflate(R.layout.rx_single, container, false);
         ButterKnife.bind(this, rootView);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setupAdapter();
     }
 
     @Override
@@ -76,11 +84,12 @@ public class RssReader extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        subscription = Observable.just(true).map(new Func1<Boolean, Boolean>() {
+        Single<List<String>> rssFeedSingle = Single.fromCallable(new Callable<List<String>>() {
+
             @Override
-            public Boolean call(Boolean aBoolean) {
+            public List<String> call() throws Exception {
                 try {
-                    readRss();
+                    return readRss();
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
                 } catch (DataFormatException e) {
@@ -88,29 +97,27 @@ public class RssReader extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return aBoolean;
+                return null;
             }
-        })
+        });
+
+        subscription = rssFeedSingle
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Boolean>() {
+                .subscribe(new SingleSubscriber<List<String>>() {
                     @Override
-                    public void onCompleted() {
+                    public void onSuccess(List<String> rssFeeds) {
                         progressBar.setVisibility(View.INVISIBLE);
                         rssFeed.setVisibility(View.VISIBLE);
-                        showFeed(rssFeeds);
+                        showFeed((ArrayList<String>) rssFeeds);
                     }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(Throwable error) {
                         progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getContext(), "Error reading feed", Toast.LENGTH_SHORT).show();
                     }
-
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-
-                    }
-                });// Observer
+                });
     }
 
     private void showFeed(ArrayList<String> rssFeeds) {
@@ -123,18 +130,14 @@ public class RssReader extends Fragment {
         rssFeed.setAdapter(rssAdapter);
     }
 
-    private void readRss() throws XmlPullParserException, IOException, DataFormatException {
+    private ArrayList<String> readRss() throws XmlPullParserException, IOException, DataFormatException {
+        ArrayList<String> rssFeeds = new ArrayList<>();
         InputStream inputStream = new URL("http://www.feedforall.com/sample.xml").openConnection().getInputStream();
         Feed feed = EarlParser.parseOrThrow(inputStream, 0);
         for (Item item : feed.getItems()) {
             String title = item.getTitle();
             rssFeeds.add(title);
         }
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setupAdapter();
+        return rssFeeds;
     }
 }

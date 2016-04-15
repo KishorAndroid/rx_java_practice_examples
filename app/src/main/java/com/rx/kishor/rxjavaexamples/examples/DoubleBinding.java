@@ -27,10 +27,13 @@ public class DoubleBinding extends Fragment {
 
     @Bind(R.id.double_binding_num1)
     EditText number1;
+
     @Bind(R.id.double_binding_num2)
     EditText number2;
+
     @Bind(R.id.double_binding_result)
     TextView result;
+
     Subscription subscription;
     PublishSubject<Float> resultEmitterSubject;
     private View rootView;

@@ -80,7 +80,6 @@ public class DebounceSearchEmitter extends Fragment {
                 .subscribe(new Observer<TextViewTextChangeEvent>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
